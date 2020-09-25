@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import React, {Component} from 'react';
+import CardList from './components/CardList';
+import SearchBox from './components/SearchBox';
+import Scroll from './components/Scroll';
+import ErrorBoundary from './components/ErrorBoundary';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      monsters: [],
+      searchfield: ''
+    }
+  }
+    
+  componentDidMount() {
+    fetch('https://my-json-server.typicode.com/brogkul/testDB/users')
+      .then(response => response.json())
+      .then(users => this.setState({monsters: users}));
+  }
+
+  onSearchChange = (event) => {
+    this.setState({searchfield: event.target.value});
+  }
+
+  render() {
+    const {monsters, searchfield} = this.state;
+    const filteredMonsters = monsters.filter(monster => {
+      return monster.name.toLowerCase().includes(searchfield.toLowerCase());
+    })
+    return !monsters.length ?
+    <h1>Loading</h1> :
+    (
+      <div className = 'tc'>
+        <h1 className = 'f-5 ma2'>Monster Friends</h1>
+        <SearchBox searchChange=  {this.onSearchChange}/>
+        <Scroll>
+          <ErrorBoundary>
+            <CardList monsters = {filteredMonsters} />
+          </ErrorBoundary>
+        </Scroll>
+      </div>
+    );
+  }
 }
 
 export default App;
