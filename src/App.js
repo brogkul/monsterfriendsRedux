@@ -32,10 +32,12 @@ function App() {
   const onSearchChange = (event) => {
     setSearchfield(event.target.value)
   }
+    
 
   const filteredMonsters = monsters.filter(monster => {
     return monster.name.toLowerCase().includes(searchfield.toLowerCase());
   })
+
   return !monsters.length ?
   <h1>Loading</h1> :
   (
