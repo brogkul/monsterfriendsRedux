@@ -28,6 +28,7 @@ const App = () => {
   
   useEffect(() => {
     onRequestMonsters()
+  // eslint-disable-next-line
   }, []);
 
   const filteredMonsters = monsters.filter(monster => {
